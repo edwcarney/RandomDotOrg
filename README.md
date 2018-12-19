@@ -7,6 +7,9 @@ Julia functions to provide support for random numbers obtained from the random.o
 <b>randomNumbers()</b>&mdash;obtain integers.<br>
 <b>randomSequence()</b>&mdash;obtain randomized sequences of integers 1..N<br>
 <b>randomStrings()</b>&mdash;obtain random strings of characters (upper/lower case letters, digits)<br>
+<b>randomGaussian()</b>&mdash;obtain random Gaussian numbers<br>
+<b>randomDecimalFractions()</b>&mdash;obtain random numbers on the interval (0,1)<br>
+<b>randomBytes()</b>&mdash;obtain random bytes in various formats<br>
 
 Simply include the file with include("RandomDotOrg.jl").
 
