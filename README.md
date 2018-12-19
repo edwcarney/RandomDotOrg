@@ -12,4 +12,4 @@ Simply include the file with include("RandomDotOrg.jl").
 
 Values are returned in vector arrays of integers or strings.
 
-Uses the HTTP package to generate requests.
+using HTTP, Printf
