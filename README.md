@@ -1,6 +1,6 @@
 # RandomDotOrg.jl
 
-Julia functions to provide support for random numbers obtained from the random.org website.
+Julia functions to provide support for random numbers obtained from the <a href="https://random.org" target="_blank">random.org</a> website.
 
 <b>getQuota()</b>&mdash;obtain current bit quota for your IP.<br>
 <b>checkQuota()</b>&mdash;check if quota is non-zero.<br>
