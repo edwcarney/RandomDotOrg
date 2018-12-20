@@ -15,6 +15,6 @@ Simply include the file with include("RandomDotOrg.jl").
 
 Values are returned in vector arrays of integers or strings.
 
-It is probably best not to use the Random.org site for any purpose that might have a direct impact on security, such as using <b>randomStrings()</b> to create passwords.
+The use of secure HTTP by random.org prevents interception while the numbers are in transit. However, is probably best not to use the Random.org site for any purpose that might have a direct impact on security. The FAQ on the website says the following: "We should probably note that while fetching the numbers via secure HTTP would protect them from being observed while in transit, anyone genuinely concerned with security should not trust anyone else (including RANDOM.ORG) to generate their cryptographic keys."
 
 using HTTP, Printf
