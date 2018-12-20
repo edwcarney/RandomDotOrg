@@ -14,7 +14,7 @@ From the RANDOM.ORG <a href="https://www.random.org/faq">FAQ (Q4.1)</a>:
 <b>randomDecimalFractions()</b>&mdash;obtain random numbers on the interval (0,1)<br>
 <b>randomBytes()</b>&mdash;obtain random bytes in various formats<br>
 
-Simply include the file with include("RandomDotOrg.jl").
+Simply include the file with <b>include("RandomDotOrg.jl")</b>.
 
 Values are returned in vector arrays of integers or strings.
 
