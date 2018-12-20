@@ -15,4 +15,6 @@ Simply include the file with include("RandomDotOrg.jl").
 
 Values are returned in vector arrays of integers or strings.
 
+It is probably best not to use this site for any purpose that might have a direct impact on security, such as using <b>randomStrings()</b> to create passwords.
+
 using HTTP, Printf
