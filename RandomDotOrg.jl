@@ -140,7 +140,6 @@ end;
 """
     Get n decimal fractions on the interval (0,1).
     Returns strings in `dec` decimal places.
-    Scientific notation only for now.
 """
 function randomDecimalFractions(n=10; dec=10, col=2, check=true)
     if (n < 1 || n > 10000) 
