@@ -169,7 +169,7 @@ function randomBytes(n=10; format="o", check=true)
         return "Random string requests must be between 1 and 10,000 numbers"
     end
     if (!(format in ["b", "d", "o", "h", "file"])) 
-        return "Base has to be one of 2, 8, 10 or 16"
+        return "Base has to be one of b, d, o, h, or file."
     end
     if (check && !quotaCheck()) 
         return "random.org suggests to wait until tomorrow"
