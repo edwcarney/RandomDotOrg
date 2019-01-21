@@ -5,7 +5,7 @@ using HTTP, Printf
 """
 function getQuota()
     r = HTTP.get("https://www.random.org/quota/?format=plain");
-    return parse(Int, rstrip(String(r.body)))
+    return parse(Int64, rstrip(String(r.body)))
 end;
 
 """
@@ -45,7 +45,7 @@ function randomNumbers(n = 100; min = 1, max = 20, base = 10, check = true, col 
                             urlbase, n, Int(min), Int(max), col, base)
 #     print(urltxt)
     response = HTTP.get( urltxt)
-    return split(rstrip(String(response.body)))
+    return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
 
 end;
 
@@ -69,7 +69,7 @@ function randomSequence(;min = 1, max = 20, col = 5, check = true)
                             urlbase, Int(min), Int(max), col)
 #     print(urltxt)
     response = HTTP.get( urltxt)
-    return split(rstrip(String(response.body)))
+    return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
 end;
 
 """
@@ -105,7 +105,7 @@ function randomStrings(n=10, len=5; digits=true, upperalpha=true, loweralpha=tru
                             ifelse(unique, "on", "off"))
 #     print(urltxt)
     response = HTTP.get( urltxt)
-    return split(rstrip(String(response.body)))
+    split(rstrip(String(response.body)))
 end;
 
 """
@@ -134,7 +134,7 @@ function randomGaussian(n=10, mean=0.0, stdev=1.0; dec=10, col=2, notation="scie
                             urlbase, n, mean, stdev, dec, col, notation)
     # print(urltxt)
     response = HTTP.get( urltxt)
-    return split(rstrip(String(response.body)))
+    return [parse(Float64, x) for x in split(rstrip(String(response.body)))]
 end;
 
 """
@@ -156,7 +156,7 @@ function randomDecimalFractions(n=10; dec=10, col=2, check=true)
                             urlbase, n, dec, col)
     # print(urltxt)
     response = HTTP.get( urltxt)
-    return split(rstrip(String(response.body)))
+    return [parse(Float64, x) for x in split(rstrip(String(response.body)))]
 end;
 
 """
@@ -183,6 +183,6 @@ function randomBytes(n=10; format="o", check=true)
     if (format == "file")
         return response.body
     else
-        return split(rstrip(String(response.body)))
+        return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
     end
 end;
