@@ -18,7 +18,7 @@ end;
     Test for sufficient quota to insure response. This should be set to match
     user's needs.
 """
-function checkQuota(minimum = 500)
+function checkQuota(minimum = 500::Number)
     return getQuota() >= minimum
 end;
 
@@ -32,7 +32,7 @@ end;
     `check::Bool`: perform a call to `checkQuota` before making request
     `col::Integer`: used to fulfill parameter requirments of random.org
 """
-function randomNumbers(n = 100; min = 1, max = 20, base = 10, check = true, col = 5) 
+function randomNumbers(n = 100::Number; min = 1::Number, max = 20::Number, base = 10, check = true, col = 5) 
     if (n < 1 || n > 10000) 
         return "Random number requests must be between 1 and 10,000 numbers"
     end
@@ -63,7 +63,7 @@ end;
     `check::Bool`: perform a call to `checkQuota` before making request
     `col::Integer`: used to fulfill parameter requirments of random.org
 """
-function randomSequence(;min = 1, max = 20, col = 5, check = true)
+function randomSequence(;min = 1::Number, max = 20::Number, col = 5, check = true)
     if (min < -1f+09 || max > 1f+09 || min > max) 
         return "Random number range must be between -1000,000,000 and 1000,000,000"
     end
@@ -87,7 +87,7 @@ end;
     `loweralpha::Bool`: include lowercase letters in strings
     `unique::Bool`: strings must be unique if `true`
 """
-function randomStrings(n=10, len=5; digits=true, upperalpha=true, loweralpha=true, unique=true, check=true)
+function randomStrings(n=10::Number, len=5; digits=true, upperalpha=true, loweralpha=true, unique=true, check=true)
     if (n < 1 || n > 10000) 
         return "Random string requests must be between 1 and 10,000 numbers"
     end
@@ -119,7 +119,7 @@ end;
     Returns strings in `dec` decimal places.
     Scientific notation only for now.
 """
-function randomGaussian(n=10, mean=0.0, stdev=1.0; dec=10, col=2, notation="scientific", check=true)
+function randomGaussian(n=10::Number, mean=0.0, stdev=1.0; dec=10, col=2, notation="scientific", check=true)
     if (n < 1 || n > 10000) 
         return "Random string requests must be between 1 and 10,000 numbers"
     end
@@ -147,7 +147,7 @@ end;
     Get n decimal fractions on the interval (0,1).
     Returns strings in `dec` decimal places.
 """
-function randomDecimalFractions(n=10; dec=10, col=2, check=true)
+function randomDecimalFractions(n=10::Number; dec=10, col=2, check=true)
     if (n < 1 || n > 10000) 
         return "Random string requests must be between 1 and 10,000 numbers"
     end
@@ -170,7 +170,7 @@ end;
     Returns strings in binary, decimal, octal, or hexadecimal.
     The request will also download a DMS file.
 """
-function randomBytes(n=10; format="o", check=true)
+function randomBytes(n=10::Number; format="o", check=true)
     if (n < 1 || n > 10000) 
         return "Random string requests must be between 1 and 10,000 numbers"
     end
