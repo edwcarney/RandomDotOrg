@@ -2,8 +2,9 @@ module RandomDotOrg
 
 using HTTP, Printf
 
-export getQuota, checkQuota, randomNumbers, randomSequence, randomStrings, randomGaussian,
-    randomDecimalFractions, randomBytes
+export  getQuota, checkQuota,
+        randomNumbers, randomSequence, randomStrings,
+        randomGaussian, randomDecimalFractions, randomBytes
 
 """
     Get the current bit quota from Random.org
@@ -28,7 +29,7 @@ end;
 
     # Arguments
     `base::Integer`: retrieved Integer format [2, 8, 10, 16]
-    `check::Bool`: perform a call to `quotaCheck` before making request
+    `check::Bool`: perform a call to `checkQuota` before making request
     `col::Integer`: used to fulfill parameter requirments of random.org
 """
 function randomNumbers(n = 100; min = 1, max = 20, base = 10, check = true, col = 5) 
@@ -41,7 +42,7 @@ function randomNumbers(n = 100; min = 1, max = 20, base = 10, check = true, col 
     if (!(base in [2, 8, 10, 16])) 
         return "Base has to be one of 2, 8, 10 or 16"
     end
-    if (check && !quotaCheck()) 
+    if (check && !checkQuota()) 
         return "random.org suggests to wait until tomorrow"
     end
 
@@ -59,14 +60,14 @@ end;
     All numbers are returned as strings (as Random.org sends them).
 
     # Arguments
-    `check::Bool`: perform a call to `quotaCheck` before making request
+    `check::Bool`: perform a call to `checkQuota` before making request
     `col::Integer`: used to fulfill parameter requirments of random.org
 """
 function randomSequence(;min = 1, max = 20, col = 5, check = true)
     if (min < -1f+09 || max > 1f+09 || min > max) 
         return "Random number range must be between -1000,000,000 and 1000,000,000"
     end
-    if (check && !quotaCheck()) 
+    if (check && !checkQuota()) 
         return "random.org suggests to wait until tomorrow"
     end
     urlbase = "https://www.random.org/sequences/"
@@ -100,7 +101,7 @@ function randomStrings(n=10, len=5; digits=true, upperalpha=true, loweralpha=tru
     if (!digits && !upperalpha && !loweralpha) 
         return "The 'digits', 'loweralpha' and 'loweralpha' cannot all be false at the same time"
     end
-    if (check && !quotaCheck()) 
+    if (check && !checkQuota()) 
         return "random.org suggests to wait until tomorrow"
     end
     urlbase = "https://www.random.org/strings/"
@@ -131,7 +132,7 @@ function randomGaussian(n=10, mean=0.0, stdev=1.0; dec=10, col=2, notation="scie
     if (dec < 2 || dec > 20)
         return "decimal places must be between 2 and 20"
     end
-    if (check && !quotaCheck()) 
+    if (check && !checkQuota()) 
         return "random.org suggests to wait until tomorrow"
     end
     urlbase = "https://www.random.org/gaussian-distributions/"
@@ -153,7 +154,7 @@ function randomDecimalFractions(n=10; dec=10, col=2, check=true)
     if (dec < 2 || dec > 20)
         return "decimal places must be between 2 and 20"
     end
-    if (check && !quotaCheck()) 
+    if (check && !checkQuota()) 
         return "random.org suggests to wait until tomorrow"
     end
     urlbase = "https://www.random.org/decimal-fractions/"
@@ -176,7 +177,7 @@ function randomBytes(n=10; format="o", check=true)
     if (!(format in ["b", "d", "o", "h", "file"])) 
         return "Base has to be one of b, d, o, h, or file."
     end
-    if (check && !quotaCheck()) 
+    if (check && !checkQuota()) 
         return "random.org suggests to wait until tomorrow"
     end
     urlbase = "https://www.random.org/cgi-bin/randbyte"
@@ -191,4 +192,5 @@ function randomBytes(n=10; format="o", check=true)
         return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
     end
 end
-end; # module
+
+end;  # module
