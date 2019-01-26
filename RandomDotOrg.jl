@@ -1,4 +1,9 @@
+module RandomDotOrg
+
 using HTTP, Printf
+
+export getQuota, checkQuota, randomNumbers, randomSequence, randomStrings, randomGaussian,
+    randomDecimalFractions, randomBytes
 
 """
     Get the current bit quota from Random.org
@@ -12,8 +17,8 @@ end;
     Test for sufficient quota to insure response. This should be set to match
     user's needs.
 """
-function quotaCheck()
-    return getQuota() >= 500
+function checkQuota(minimum = 500)
+    return getQuota() >= minimum
 end;
 
 """
@@ -185,4 +190,5 @@ function randomBytes(n=10; format="o", check=true)
     else
         return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
     end
-end;
+end
+end; # module
