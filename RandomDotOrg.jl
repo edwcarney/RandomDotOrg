@@ -32,12 +32,12 @@ end;
     `check::Bool`: perform a call to `checkQuota` before making request
     `col::Integer`: used to fulfill parameter requirments of random.org
 """
-function randomNumbers(n = 100::Number; min = 1::Number, max = 20::Number, base = 10, check = true, col = 5) 
+function randomNumbers(n = 100::Number; min = 1, max = 20, base = 10, check = true, col = 5) 
     if (n < 1 || n > 10000) 
-        return "Random number requests must be between 1 and 10,000 numbers"
+        return "Requests must be between 1 and 10,000 numbers"
     end
     if (min < -1f+09 || max > 1f+09 || min > max) 
-        return "Random number range must be between -1000,000,000 and 1000,000,000"
+        return "Range must be between -1E9 and 1E9"
     end
     if (!(base in [2, 8, 10, 16])) 
         return "Base has to be one of 2, 8, 10 or 16"
@@ -65,7 +65,7 @@ end;
 """
 function randomSequence(;min = 1::Number, max = 20::Number, col = 5, check = true)
     if (min < -1f+09 || max > 1f+09 || min > max) 
-        return "Random number range must be between -1000,000,000 and 1000,000,000"
+        return "Range must be between -1E9 and 1E9"
     end
     if (check && !checkQuota()) 
         return "random.org suggests to wait until tomorrow"
@@ -73,7 +73,6 @@ function randomSequence(;min = 1::Number, max = 20::Number, col = 5, check = tru
     urlbase = "https://www.random.org/sequences/"
     urltxt = @sprintf("%s?min=%d&max=%d&col=%d&format=plain&rnd=new",
                             urlbase, Int(min), Int(max), col)
-#     print(urltxt)
     response = HTTP.get( urltxt)
     return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
 end;
@@ -89,17 +88,17 @@ end;
 """
 function randomStrings(n=10::Number, len=5; digits=true, upperalpha=true, loweralpha=true, unique=true, check=true)
     if (n < 1 || n > 10000) 
-        return "Random string requests must be between 1 and 10,000 numbers"
+        return "1 to 10,000 requests only"
     end
     if (len < 1 || len > 20) 
-        return "Random string length must be between 1 and 20"
+        return "Length must be between 1 and 20"
     end
     if (typeof(digits) != Bool || typeof(upperalpha) != Bool || 
         typeof(loweralpha) != Bool || typeof(unique) != Bool) 
-        return "The 'digits', '(lower|upper)alpha' and 'unique' arguments has to be logical"
+        return "The 'digits', '(lower|upper)alpha' and 'unique' arguments have to be logical"
     end
     if (!digits && !upperalpha && !loweralpha) 
-        return "The 'digits', 'loweralpha' and 'loweralpha' cannot all be false at the same time"
+        return "The 'digits', 'loweralpha' and 'upperalpha' cannot all be false"
     end
     if (check && !checkQuota()) 
         return "random.org suggests to wait until tomorrow"
@@ -121,13 +120,13 @@ end;
 """
 function randomGaussian(n=10::Number, mean=0.0, stdev=1.0; dec=10, col=2, notation="scientific", check=true)
     if (n < 1 || n > 10000) 
-        return "Random string requests must be between 1 and 10,000 numbers"
+        return "Requests must be between 1 and 10,000 numbers"
     end
     if (mean < -1f+06 || mean > 1f+06)
-        return "mean must be between -1,000,000 and 1,000,000"
+        return "mean must be between -1E6 and 1E6"
     end
     if (stdev < -1f+06 || stdev > 1f+06)
-        return "std dev must be between -1,000,000 and 1,000,000"
+        return "std dev must be between -1E6 and 1E6"
     end
     if (dec < 2 || dec > 20)
         return "decimal places must be between 2 and 20"
@@ -149,7 +148,7 @@ end;
 """
 function randomDecimalFractions(n=10::Number; dec=10, col=2, check=true)
     if (n < 1 || n > 10000) 
-        return "Random string requests must be between 1 and 10,000 numbers"
+        return "Requests must be between 1 and 10,000 numbers"
     end
     if (dec < 2 || dec > 20)
         return "decimal places must be between 2 and 20"
@@ -172,7 +171,7 @@ end;
 """
 function randomBytes(n=10::Number; format="o", check=true)
     if (n < 1 || n > 10000) 
-        return "Random string requests must be between 1 and 10,000 numbers"
+        return "Requests must be between 1 and 10,000 numbers"
     end
     if (!(format in ["b", "d", "o", "h", "file"])) 
         return "Base has to be one of b, d, o, h, or file."
