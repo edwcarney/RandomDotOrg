@@ -2,9 +2,8 @@ module RandomDotOrg
 
 using HTTP, Printf
 
-export  getQuota, checkQuota,
-        randomNumbers, randomSequence, randomStrings,
-        randomGaussian, randomDecimalFractions, randomBytes
+export  getQuota, checkQuota, randomNumbers, randomSequence, randomStrings, randomGaussian,
+        randomDecimalFractions, randomBytes
 
 """
     Get the current bit quota from Random.org
@@ -33,22 +32,17 @@ end;
     `col::Integer`: used to fulfill parameter requirments of random.org
 """
 function randomNumbers(n = 100::Number; min = 1, max = 20, base = 10, check = true, col = 5) 
-    if (n < 1 || n > 10000) 
-        return "Requests must be between 1 and 10,000 numbers"
-    end
-    if (min < -1f+09 || max > 1f+09 || min > max) 
-        return "Range must be between -1E9 and 1E9"
-    end
-    if (!(base in [2, 8, 10, 16])) 
-        return "Base has to be one of 2, 8, 10 or 16"
-    end
-    if (check && !checkQuota()) 
-        return "random.org suggests to wait until tomorrow"
-    end
+    (n < 1 || n > 10000) && return "Requests must be between 1 and 10,000 numbers"
+
+    (min < -1f+09 || max > 1f+09 || min > max) && return "Range must be between -1e9 and 1e9"
+
+    (!(base in [2, 8, 10, 16])) && return "Base has to be one of 2, 8, 10 or 16"
+
+    (check && !checkQuota()) && return "random.org suggests to wait until tomorrow"
 
     urlbase = "https://www.random.org/integers/"
     urltxt = @sprintf("%s?num=%d&min=%d&max=%d&col=%d&base=%d&format=plain&rnd=new",
-                            urlbase, n, Int(min), Int(max), col, base)
+                    urlbase, n, Int(min), Int(max), col, base)
 #     print(urltxt)
     response = HTTP.get( urltxt)
     return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
@@ -64,15 +58,13 @@ end;
     `col::Integer`: used to fulfill parameter requirments of random.org
 """
 function randomSequence(;min = 1::Number, max = 20::Number, col = 5, check = true)
-    if (min < -1f+09 || max > 1f+09 || min > max) 
-        return "Range must be between -1E9 and 1E9"
-    end
-    if (check && !checkQuota()) 
-        return "random.org suggests to wait until tomorrow"
-    end
+    (min < -1f+09 || max > 1f+09 || min > max) && return "Range must be between -1e9 and 1e9"
+
+    (check && !checkQuota()) && return "random.org suggests to wait until tomorrow"
+ 
     urlbase = "https://www.random.org/sequences/"
     urltxt = @sprintf("%s?min=%d&max=%d&col=%d&format=plain&rnd=new",
-                            urlbase, Int(min), Int(max), col)
+                    urlbase, Int(min), Int(max), col)
     response = HTTP.get( urltxt)
     return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
 end;
@@ -87,27 +79,21 @@ end;
     `unique::Bool`: strings must be unique if `true`
 """
 function randomStrings(n=10::Number, len=5; digits=true, upperalpha=true, loweralpha=true, unique=true, check=true)
-    if (n < 1 || n > 10000) 
-        return "1 to 10,000 requests only"
-    end
-    if (len < 1 || len > 20) 
-        return "Length must be between 1 and 20"
-    end
-    if (typeof(digits) != Bool || typeof(upperalpha) != Bool || 
-        typeof(loweralpha) != Bool || typeof(unique) != Bool) 
-        return "The 'digits', '(lower|upper)alpha' and 'unique' arguments have to be logical"
-    end
-    if (!digits && !upperalpha && !loweralpha) 
-        return "The 'digits', 'loweralpha' and 'upperalpha' cannot all be false"
-    end
-    if (check && !checkQuota()) 
-        return "random.org suggests to wait until tomorrow"
-    end
+    (n < 1 || n > 10000) && return "1 to 10,000 requests only"
+
+    (len < 1 || len > 20) && return "Length must be between 1 and 20"
+
+    (typeof(digits) != Bool || typeof(upperalpha) != Bool || typeof(loweralpha) != Bool || typeof(unique) != Bool) && return "The 'digits', '(lower|upper)alpha' and 'unique' arguments have to be logical"
+
+    (!digits && !upperalpha && !loweralpha) && return "The 'digits', 'loweralpha' and 'upperalpha' cannot all be false"
+
+    (check && !checkQuota()) && return "random.org suggests to wait until tomorrow"
+
     urlbase = "https://www.random.org/strings/"
     urltxt = @sprintf("%s?num=%d&len=%d&digits=%s&upperalpha=%s&loweralpha=%s&unique=%s&format=plain&rnd=new",
-                            urlbase, n, len, ifelse(digits, "on", "off"),
-                            ifelse(upperalpha, "on", "off"), ifelse(loweralpha, "on", "off"),
-                            ifelse(unique, "on", "off"))
+                urlbase, n, len, ifelse(digits, "on", "off"),
+                ifelse(upperalpha, "on", "off"), ifelse(loweralpha, "on", "off"),
+                ifelse(unique, "on", "off"))
 #     print(urltxt)
     response = HTTP.get( urltxt)
     split(rstrip(String(response.body)))
@@ -119,24 +105,19 @@ end;
     Scientific notation only for now.
 """
 function randomGaussian(n=10::Number, mean=0.0, stdev=1.0; dec=10, col=2, notation="scientific", check=true)
-    if (n < 1 || n > 10000) 
-        return "Requests must be between 1 and 10,000 numbers"
-    end
-    if (mean < -1f+06 || mean > 1f+06)
-        return "mean must be between -1E6 and 1E6"
-    end
-    if (stdev < -1f+06 || stdev > 1f+06)
-        return "std dev must be between -1E6 and 1E6"
-    end
-    if (dec < 2 || dec > 20)
-        return "decimal places must be between 2 and 20"
-    end
-    if (check && !checkQuota()) 
-        return "random.org suggests to wait until tomorrow"
-    end
+    (n < 1 || n > 10000) && return "Requests must be between 1 and 10,000 numbers"
+
+    (mean < -1f+06 || mean > 1f+06) && return "Mean must be between -1e6 and 1e6"
+
+    (stdev < -1f+06 || stdev > 1f+06) && return "Std dev must be between -1e6 and 1e6"
+
+    (dec < 2 || dec > 20) && return "Decimal places must be between 2 and 20"
+
+    (check && !checkQuota()) && return "random.org suggests to wait until tomorrow"
+
     urlbase = "https://www.random.org/gaussian-distributions/"
     urltxt = @sprintf("%s?num=%d&mean=%f&stdev=%f&dec=%d&col=%d&notation=%s&format=plain&rnd=new",
-                            urlbase, n, mean, stdev, dec, col, notation)
+                    urlbase, n, mean, stdev, dec, col, notation)
     # print(urltxt)
     response = HTTP.get( urltxt)
     return [parse(Float64, x) for x in split(rstrip(String(response.body)))]
@@ -147,18 +128,15 @@ end;
     Returns strings in `dec` decimal places.
 """
 function randomDecimalFractions(n=10::Number; dec=10, col=2, check=true)
-    if (n < 1 || n > 10000) 
-        return "Requests must be between 1 and 10,000 numbers"
-    end
-    if (dec < 2 || dec > 20)
-        return "decimal places must be between 2 and 20"
-    end
-    if (check && !checkQuota()) 
-        return "random.org suggests to wait until tomorrow"
-    end
+    (n < 1 || n > 10000) && return "Requests must be between 1 and 10,000 numbers"
+
+    (dec < 2 || dec > 20) && return "Decimal places must be between 2 and 20"
+
+    (check && !checkQuota()) && return "random.org suggests to wait until tomorrow"
+
     urlbase = "https://www.random.org/decimal-fractions/"
     urltxt = @sprintf("%s?num=%d&dec=%d&col=%d&format=plain&rnd=new",
-                            urlbase, n, dec, col)
+                        urlbase, n, dec, col)
     # print(urltxt)
     response = HTTP.get( urltxt)
     return [parse(Float64, x) for x in split(rstrip(String(response.body)))]
@@ -170,24 +148,21 @@ end;
     The request will also download a DMS file.
 """
 function randomBytes(n=10::Number; format="o", check=true)
-    if (n < 1 || n > 10000) 
-        return "Requests must be between 1 and 10,000 numbers"
-    end
-    if (!(format in ["b", "d", "o", "h", "file"])) 
-        return "Base has to be one of b, d, o, h, or file."
-    end
-    if (check && !checkQuota()) 
-        return "random.org suggests to wait until tomorrow"
-    end
+    (n < 1 || n > 10000) && return "Requests must be between 1 and 10,000 numbers"
+
+    (!(format in ["b", "d", "o", "h", "file"])) && return "Format must be one of b, d, o, h, or file."
+
+    (check && !checkQuota()) && return "random.org suggests to wait until tomorrow"
+
     urlbase = "https://www.random.org/cgi-bin/randbyte"
     urltxt = @sprintf("%s?nbytes=%d^=&format=%s",
-                            urlbase, n, format)
+                        urlbase, n, format)
     # print(urltxt)
     # response = HTTP.get( urltxt)
     response = HTTP.get(urltxt)
     if (format == "file")
         return response.body
-    else
+    else 
         return [parse(Int64, x) for x in split(rstrip(String(response.body)))]
     end
 end
