@@ -167,4 +167,43 @@ function randomBytes(n=10::Number; format="o", check=true)
     end
 end
 
+"""
+    Get a random bitmap.
+    Returns bitmap as PNG or GIF.
+
+    # Arguments
+    `format::String`: png or gif
+    `height, width`: 1-300 pixels in each dimension
+    `save`: filename/filepath to write file (extension added by default)
+    `overwrite`: will not overwrite by default; set to 'y' to overwrite
+"""
+function randomBitmap(format="png"; width=64, height=64, save="", overwrite='n', check=true)
+    (!(format in ["png", "gif"])) && return "Format must be png or gif."
+
+    (width < 1 || width > 300 || height < 1 || height > 300) && return "Height/Width must be no more than 300."
+
+    (check && !checkQuota()) && return "random.org suggests to wait until tomorrow"
+
+    full_path = @sprintf("%s.%s", save, format)
+    (isfile(full_path) && overwrite=='n') && return @sprintf("File %s exists. Set overwrite to 'y' to save.", full_path)
+
+    urlbase = "https://www.random.org/bitmaps"
+    urltxt = @sprintf("%s?format=%s&height=%d&width=%d&zoom=1",
+                        urlbase, format, height, width)
+    response = HTTP.get(urltxt)
+    if save == ""
+        return(response.body)
+    else
+        # full_path = @sprintf("%s.%s", save, format)
+        # if isfile(full_path) && overwrite == 'n'
+        #     @printf("File not saved; %s exists. Set overwrite to \"y\".", full_path)
+        # else
+        open(full_path, "w") do outfile
+            write(outfile, response.body)
+        end
+        @printf("File saved as: %s\n", full_path)
+    # end
+    end
+end
+
 end;  # module
