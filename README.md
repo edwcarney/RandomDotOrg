@@ -13,7 +13,7 @@ From the RANDOM.ORG <a href="https://www.random.org/faq">FAQ (Q4.1)</a>:
 <b>randomGaussian()</b>&mdash;obtain random Gaussian numbers<br>
 <b>randomDecimalFractions()</b>&mdash;obtain random numbers on the interval (0,1)<br>
 <b>randomBytes()</b>&mdash;obtain random bytes in various formats<br>
-<b>randomBitmap()</b>&mdash;obtain a bitmap of size up to 300 x 300 as GIF or PNG.
+<b>randomBitmap()</b>&mdash;obtain a random bitmap of size up to 300 x 300 as GIF or PNG.
 
 Simply include the file with <b>include("RandomDotOrg.jl")</b>. You may also place the module in a folder entitled <i>RandomDotOrg/src</i> and add the folder to your Julia LOAD_PATH. See <a href="https://en.wikibooks.org/wiki/Introducing_Julia/Modules_and_packages#How_does_Julia_find_a_module?">here</a> for information on custom modules.
 
