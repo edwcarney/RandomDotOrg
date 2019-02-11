@@ -1,3 +1,22 @@
+"""
+    RandomDotOrg
+
+Use various functions from https://random.org (q.v.).
+
+# Currently available
+- getQuota(): obtain current bit quota for your IP.
+- checkQuota(): check if quota is non-zero.
+- randomNumbers(): obtain integers.
+- randomSequence(): obtain randomized sequences of integers 1..N
+- randomStrings(): obtain random strings of characters (upper/lower case letters, digits)
+- randomGaussian(): obtain random Gaussian numbers
+- randomDecimalFractions(): obtain random numbers on the interval (0,1)
+- randomBytes(): obtain random bytes in various formats
+- randomBitmap(): obtain a random bitmap of size up to 300 x 300 as GIF or PNG.
+
+Github repository at: https://github.com/edwcarney/RandomDotOrg
+
+"""
 module RandomDotOrg
 
 using HTTP, Printf
