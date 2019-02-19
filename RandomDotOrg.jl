@@ -206,7 +206,7 @@ Scientific notation only for now.
 
 # Arguments
 - `mean`, `stdev` : between [-1e6, 1e6]
-- `dec1` : decimal places [2,20]
+- `dec` : decimal places [2,20]
 - `col` : unique value
 - `scientific` : unique value
 - `check::Bool`: perform a call to `checkQuota` before making request
